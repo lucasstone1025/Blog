@@ -1,4 +1,4 @@
-This is a basic blog web app built with Node.js and Express. 
+This is a basic blog web app built with Node.js, Express, and EJS. 
 It lets you add and delete blog posts, all stored in memory (no database required). 
 Posts are lost when the server restarts.
 
