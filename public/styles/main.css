@@ -1,0 +1,32 @@
+.title {
+    text-align: center;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.form-container{
+    display : flex;
+    align-items:flex-start;
+    justify-content: center;
+    height : 100vh;
+
+}
+.form-inside {
+    display : flex;
+    flex-direction: column;
+    gap : 16px;
+    width : 300px;
+}
+
+.post {
+    display : flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap : 16px;
+    height : 25vh;
+    border : 2px solid black;
+    width : 400px;
+    margin : 40px auto;
+}
+

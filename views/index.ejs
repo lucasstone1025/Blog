@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+
+    <link rel="stylesheet" href="/styles/main.css">
+</head>
+<header>
+    <%- include("partials/header.ejs") %>
+</header>
+<body>
+    <h1 class="title">Home</h1>
+    <% for(let i = 0; i < posts.length; i++) { %>
+        <div class="post">
+            <h2>
+                <%= posts[i].subject %> 
+            </h2>
+            <p>
+                <%= posts[i].text %>
+            </p>
+            <form action="/delete/<%= i %>" method="POST">
+                <button type="submit">Delete Post</button>
+            </form>
+        </div>
+    <% } %>
+
+
+
+    
+</body>
+
+<footer>
+    <%- include("partials/footer.ejs") %>
+</footer>
+</html>
