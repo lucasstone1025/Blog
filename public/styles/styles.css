@@ -1,3 +1,8 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
 .title {
     text-align: center;
     font-weight: bold;
@@ -18,15 +23,25 @@
     width : 300px;
 }
 
-.post {
-    display : flex;
-    justify-content: center;
-    align-items: center;
+.wrapper {
+    display: flex;
     flex-direction: column;
-    gap : 16px;
-    height : 25vh;
-    border : 2px solid black;
-    width : 400px;
-    margin : 40px auto;
+    min-height: 100vh;
+}
+
+main {
+    flex: 1;
+}
+
+body {
+    background-color: #f8f9fa;
+}
+  
+.form-signin {
+    max-width: 400px;
+    padding: 2rem;
+    background-color: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
