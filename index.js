@@ -38,7 +38,7 @@ app.use(passport.session());
 const db = new pg.Client({
   connectionString: process.env.DATABASE_URL,
   ssl: {
-    rejectUnauthorized: false, // Required for most hosted Postgres instances
+    rejectUnauthorized: false, 
   },
 });
 
@@ -105,13 +105,19 @@ app.get("/contact", (req,res) => {
   }
 });
 
-app.post(
-  "/login",
-  passport.authenticate("local", {
-    successRedirect: "/home",
-    failureRedirect: "/login",
-  })
-);
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) return next(err);
+    if (!user) {
+      // custom error for login
+      return res.render("login", { errorMessage: info.message });
+    }
+    req.logIn(user, (err) => {
+      if (err) return next(err);
+      return res.redirect("/home");
+    });
+  })(req, res, next);
+});
 
 app.post("/register", async (req,res) => {
   const email = req.body.email;
@@ -190,7 +196,7 @@ passport.use(
           [username]
         );
       } catch (queryErr) {
-        console.error("🔥 QUERY FAILED:", queryErr);
+        console.error("QUERY FAILED:", queryErr);
         return cb(queryErr);
       }
 
@@ -202,17 +208,20 @@ passport.use(
           if (err) {
             console.error("Error comparing passwords:", err);
             return cb(err);
-          } else {
-            return valid ? cb(null, user) : cb(null, false);
           }
+          if (!valid) {
+            return cb(null, false, { message: "Incorrect password." });
+          }
+          return cb(null, user);
         });
       } else {
         console.log("No user found with that username.");
-        return cb(null, false);
+        return cb(null, false, { message: "Username not found." });
       }
     }
   )
 );
+
 
 
 passport.serializeUser((user, cb) => {
