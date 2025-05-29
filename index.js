@@ -186,7 +186,7 @@ passport.use(
       async function verify(username, password, cb) {
       console.log("Attempting login for: ", username);
       try {
-        const result = await db.query("SELECT * FROM users WHERE username = $1 ", [
+        const result = await db.query("SELECT * FROM users WHERE LOWER(username) = LOWER($1)", [
           username,
         ]);
         if (result.rows.length > 0) {
@@ -211,6 +211,7 @@ passport.use(
           return cb(null, false);
         }
       } catch (err) {
+        console.error("DB Query Error:", err);
         return cb(err);
       }
     })
