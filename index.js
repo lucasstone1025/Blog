@@ -180,42 +180,48 @@ app.post("/delete/:id", async (req,res) => {
 
 
 passport.use(
-    "local",
-    new Strategy(
-      { usernameField: "username" },
-      async function verify(username, password, cb) {
+  "local",
+  new Strategy(
+    { usernameField: "username" },
+    async function verify(username, password, cb) {
       console.log("Attempting login for: ", username);
+
+      let result;
       try {
-        const result = await db.query("SELECT * FROM users WHERE LOWER(username) = LOWER($1)", [
-          username,
-        ]);
-        if (result.rows.length > 0) {
-          const user = result.rows[0];
-          const storedHashedPassword = user.password;
-          bcrypt.compare(password, storedHashedPassword, (err, valid) => {
-            console.log("Entered password:", password);
-            console.log("Stored hashed password:", storedHashedPassword);
-            console.log("Password match?", valid);
-            if (err) {
-              console.error("Error comparing passwords:", err);
-              return cb(err);
-            } else {
-              if (valid) {
-                return cb(null, user);
-              } else {
-                return cb(null, false);
-              }
-            }
-          });
-        } else {
-          return cb(null, false);
-        }
-      } catch (err) {
-        console.error("DB Query Error:", err);
-        return cb(err);
+        result = await db.query(
+          "SELECT * FROM users WHERE LOWER(username) = LOWER($1)",
+          [username]
+        );
+        console.log("DB result rows:", result.rows);
+      } catch (queryErr) {
+        console.error("🔥 QUERY FAILED:", queryErr);
+        return cb(queryErr);
       }
-    })
-  );
+
+      if (result.rows.length > 0) {
+        const user = result.rows[0];
+        const storedHashedPassword = user.password;
+
+        console.log("Entered password:", password);
+        console.log("Stored hashed password:", storedHashedPassword);
+
+        bcrypt.compare(password, storedHashedPassword, (err, valid) => {
+          console.log("Password match?", valid);
+          if (err) {
+            console.error("Error comparing passwords:", err);
+            return cb(err);
+          } else {
+            return valid ? cb(null, user) : cb(null, false);
+          }
+        });
+      } else {
+        console.log("No user found with that username.");
+        return cb(null, false);
+      }
+    }
+  )
+);
+
 
 passport.serializeUser((user, cb) => {
     cb(null, user);
