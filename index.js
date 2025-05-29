@@ -118,8 +118,6 @@ app.post("/register", async (req,res) => {
   const username = req.body.username;
   const password = req.body.password;
 
-  console.log(`email: ${email}, password: ${password}, username: ${username}`);
-
   try {
       const checkResult = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
@@ -167,7 +165,6 @@ app.post("/post", async (req,res) => {
 app.post("/delete/:id", async (req,res) => {
 
   const postId = req.params.id;
-  console.log(postId);
 
   try {
     await db.query("DELETE FROM posts WHERE id = $1", [postId]);
@@ -192,7 +189,6 @@ passport.use(
           "SELECT * FROM users WHERE LOWER(username) = LOWER($1)",
           [username]
         );
-        console.log("DB result rows:", result.rows);
       } catch (queryErr) {
         console.error("🔥 QUERY FAILED:", queryErr);
         return cb(queryErr);
@@ -202,11 +198,7 @@ passport.use(
         const user = result.rows[0];
         const storedHashedPassword = user.password;
 
-        console.log("Entered password:", password);
-        console.log("Stored hashed password:", storedHashedPassword);
-
         bcrypt.compare(password, storedHashedPassword, (err, valid) => {
-          console.log("Password match?", valid);
           if (err) {
             console.error("Error comparing passwords:", err);
             return cb(err);
