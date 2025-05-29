@@ -12,7 +12,7 @@
   <div class="wrapper">
     <%- include("partials/header.ejs") %>
 
-    <main class="content container py-5">
+    <main class="content container ">
       <h1 class="title mb-4">Home</h1>
 
       <div class="row justify-content-center">
@@ -24,6 +24,7 @@
                 <p class="card-text"><%= post.content %></p>
                 <p class="text-muted small mb-0">
                   Posted by <strong><%= post.username %></strong>
+                  <p class="date" style="font-size: x-small;">Posted on: <%= new Date(post.created_at).toLocaleString() %></p>
                 </p>
               </div>
             </div>

@@ -1,6 +1,5 @@
 import express from "express";
 import bodyParser from "body-parser";
-import {dirname} from "path";
 import pg from "pg";
 import bcrypt from "bcrypt";
 import passport from "passport";
@@ -28,18 +27,21 @@ app.set('view engine', 'ejs');
 app.use(passport.initialize());
 app.use(passport.session());
 
-const db = process.env.DATABASE_URL
-  ? new pg.Client({
-      connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false },
-    })
-  : new pg.Client({
-      user: process.env.PG_USER,
-      host: process.env.PG_HOST,
-      database: process.env.PG_DATABASE,
-      password: process.env.PG_PASSWORD,
-      port: process.env.PG_PORT,
-    });
+// const db = new pg.Client({
+//   user: process.env.PG_USER,
+//   host: process.env.PG_HOST,
+//   database: process.env.PG_DATABASE,
+//   password: process.env.PG_PASSWORD,
+//   port: process.env.PG_PORT,
+// });
+
+const db = new pg.Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // Required for most hosted Postgres instances
+  },
+});
+
 
 db.connect();
 
@@ -180,12 +182,12 @@ app.post("/delete/:id", async (req,res) => {
 passport.use(
     "local",
     new Strategy(
-      { usernameField: "email" },
-      async function verify(email, password, cb) {
-      console.log("Attempting login for: ", email);
+      { usernameField: "username" },
+      async function verify(username, password, cb) {
+      console.log("Attempting login for: ", username);
       try {
-        const result = await db.query("SELECT * FROM users WHERE email = $1 ", [
-          email,
+        const result = await db.query("SELECT * FROM users WHERE username = $1 ", [
+          username,
         ]);
         if (result.rows.length > 0) {
           const user = result.rows[0];

@@ -21,8 +21,9 @@
                         <div class="col-md-8">
                             <div class="card mb-4 shadow-sm">
                                 <div class="card-body">
-                                    <h5 class="card-title"><%= posts.subject %></h5>
+                                    <h5 class="card-title"><%= posts[i].subject %></h5>
                                     <p class="card-text"><%= posts[i].content %></p>
+                                    <p class="date" style="font-size: x-small;">Posted on: <%= new Date(posts[i].created_at).toLocaleString() %></p>
                                     <form action="/delete/<%= posts[i].id %>" method="POST">
                                         <button type="submit">Delete Post</button>
                                     </form>
