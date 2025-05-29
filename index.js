@@ -205,7 +205,7 @@ passport.use(
             }
           });
         } else {
-          return cb("User not found");
+          return cb(null, false);
         }
       } catch (err) {
         return cb(err);
