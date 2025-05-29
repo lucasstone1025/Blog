@@ -193,6 +193,9 @@ passport.use(
           const user = result.rows[0];
           const storedHashedPassword = user.password;
           bcrypt.compare(password, storedHashedPassword, (err, valid) => {
+            console.log("Entered password:", password);
+            console.log("Stored hashed password:", storedHashedPassword);
+            console.log("Password match?", valid);
             if (err) {
               console.error("Error comparing passwords:", err);
               return cb(err);
