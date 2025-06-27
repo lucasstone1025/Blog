@@ -1,5 +1,8 @@
-This is a basic blog web app built with Node.js, Express, and EJS. 
+This is a blog web app built with Node.js, Express, and EJS. 
 It lets you add and delete blog posts, stored in pg database. 
+
+# DEPLOYED @ https://postline.onrender.com 
+*Takes 45 Seconds to load because free version*
 
 Features
   Add blog posts
